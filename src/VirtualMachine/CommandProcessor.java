@@ -10,6 +10,8 @@ public class CommandProcessor {
             "pop", "prnl", "gd**", "pd*", "halt", "ps*", "pd*", "pp*"};
     public VirtualMemory memory;
     public int sp;
+
+    // Kas sitas pc?
     public int pc;
     public int ptr;
 

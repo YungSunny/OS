@@ -32,19 +32,6 @@ public class MemoryBlock {
         data[index] = value;
     }
 
-    public void pushWord(String data, int sp) {
-        getWord(sp).setValue(data);
-    }
-
-    public String popWord(int sp) {
-        getWord(sp+1).setValue(ZEROED);
-        return getWord(sp).getValue();
-    }
-
-    public void putWord(String data, int offset) {
-        getWord(offset).setValue(data);
-    }
-
     public String get(int offset) {
         return getWord(offset).getValue();
     }

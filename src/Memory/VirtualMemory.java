@@ -2,14 +2,16 @@ package Memory;
 
 public class VirtualMemory {
     private MemoryBlock[] memory;
-    public static final int VIRTUAL_MEMORY_BLOCKS = 16;
+    private static final int VIRTUAL_MEMORY_BLOCKS = 16;
     public int ptr;
     public RealMemory realMemory;
+
     /*
     code segment 0 - 6
     data segment 7 - 13
     stack segment 14 - 15
     */
+    
     private int[] segments = {0, 7, 14, 15};
     // code, data, stack
     private int[] currentBlock = {0, 7, 14};
@@ -61,7 +63,7 @@ public class VirtualMemory {
                 currentBlock[1]++;
 
         }
-        
+
         getBlock(currentBlock[1]).pushData(currentOffset[1], statement);
         currentOffset[1]++;
         syncMemory();

@@ -1,5 +1,7 @@
 package RealMachine;
 
+// kodel cia nx viskas static? :D
+
 public class Processor {
 
     //modo registras
@@ -28,7 +30,14 @@ public class Processor {
     //pozymmiu registras
     public static byte[] sf = {0, 0, 0, 0}; //0-OF, 1-SF, 2-ZF, 3-CF
 
-    public Processor() {
+    private static final Processor instance;
+
+    private Processor() {
+        setRegisters();
+    }
+
+    public static Processor getInstance() {
+        return (instance == null) ? new Processor() : instance;
     }
 
     public static void setRegisters() {
