@@ -5,6 +5,7 @@ public class Memory {
     private static final int WORD_SIZE = 4;
     private static final int WORD_COUNT = 4096;
     private static final int BLOCK_SIZE = 16;
+    private static final int VM_BLOCK_COUNT = 16;
 
 
 
