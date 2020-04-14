@@ -30,7 +30,7 @@ public class CommandProcessor {
         return memory.pop(sp--);
     }
 
-    //  Jeigu rezultatas netelpa, OF = 1. Jeigu reikšmės ženklo bitas yra 1, SF = 1.
+    //  Jeigu rezultatas netelpa, OF = 1. Jeigu reiksmes zenklo bitas yra 1, SF = 1.
     public void ADD() {
         String a = memory.pop(sp--);
         int a1 = Integer.parseInt(a, 16);
@@ -47,7 +47,7 @@ public class CommandProcessor {
         }
         memory.push(String.valueOf(b1), sp++);
         memory.push(String.valueOf(a1), sp++);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
     public void SUB() {
@@ -68,7 +68,7 @@ public class CommandProcessor {
         }
         memory.getBlock(0).push(String.valueOf(b1), ++sp);
         memory.getBlock(0).push(String.valueOf(a1), ++sp);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
     public void MUL() {
@@ -88,10 +88,10 @@ public class CommandProcessor {
         }
         memory.getBlock(0).push(String.valueOf(b1), ++sp);
         memory.getBlock(0).push(String.valueOf(a1), ++sp);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
-    // Padalina R1 iš R2, įrašoma į R1. Jeigu reikšmės ženklo bitas yra 1, SF = 1.
+    // Padalina R1 is R2, irasoma i R1. Jeigu reiksmes zenklo bitas yra 1, SF = 1.
     public void DIV() {
         String a = memory.getBlock(0).pop(sp--);
         int a1 = Integer.parseInt(a, 16);
@@ -104,10 +104,10 @@ public class CommandProcessor {
         }
         memory.getBlock(0).push(String.valueOf(b1), ++sp);
         memory.getBlock(0).push(String.valueOf(a1), ++sp);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
-    //Ši komanda palygina registre R1 ir R2 ęsančias reikšmes. Jeigu reikšmės lygios, ZF = 1, priešingu atveju ZF = 0.
+    //si komanda palygina registre R1 ir R2 esancias reiksmes. Jeigu reiksmes lygios, ZF = 1, priesingu atveju ZF = 0.
     public void CMP() {
         String a = memory.getBlock(0).pop(sp--);
         int a1 = Integer.parseInt(a, 16);
@@ -122,24 +122,24 @@ public class CommandProcessor {
         }
         memory.getBlock(0).push(String.valueOf(b1), ++sp);
         memory.getBlock(0).push(String.valueOf(a1), ++sp);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
-    //TODO VISI JUMPAI NUŠOKA DUOTU ADRESU
-    //JMx1x2 - besąlyginio valdymo perdavimo komanda. Ji reiškia, kad valdymas turi būti perduotas kodo segmento žodžiui, nurodytam adresu 16 * x1 + x2
+    //TODO VISI JUMPAI NUsOKA DUOTU ADRESU
+    //JMx1x2 - besalyginio valdymo perdavimo komanda. Ji reiskia, kad valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16 * x1 + x2
     public void JM(String address) {
         pc = Integer.parseInt(address, 16);
 
     }
 
-    //JEx1x2 - valdymas turi būti perduotas kodo segmento žodžiui, nurodytam adresu 16* x1 + x2 jeigu ZF = 1
+    //JEx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu ZF = 1
     public void JE(String address) {
         if (Processor.getZF() == 1) {
             pc = Integer.parseInt(address, 16);
         }
     }
 
-    //JNx1x2 - valdymas turi būti perduotas kodo segmentui, nurodytam adresu 16*x1+x2, jeigu ZF = 0
+    //JNx1x2 - valdymas turi buti perduotas kodo segmentui, nurodytam adresu 16*x1+x2, jeigu ZF = 0
     public void JN(String address) {
         if (Processor.getZF() == 0) {
             pc = Integer.parseInt(address, 16);
@@ -147,28 +147,28 @@ public class CommandProcessor {
 
     }
 
-    //JAx1x2 - valdymas turi būti perduotas kodo segmento žodžiui, nurodytam adresu 16* x1 + x2 jeigu CF = OF
+    //JAx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu CF = OF
     public void JA(String address) {
         if (Processor.getCF() == 0) {
             pc = Integer.parseInt(address, 16);
         }
     }
 
-    //JBx1x2 - valdymas turi būti perduotas kodo segmento žodžiui, nurodytam adresu 16* x1 + x2 jeigu CF=1
+    //JBx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu CF=1
     public void JB(String address) {
         if (Processor.getCF() == 1) {
             pc = Integer.parseInt(address, 16);
         }
     }
 
-    //JGx1x2 - valdymas turi būti perduotas kodo segmento žodžiui, nurodytam adresu 16* x1 + x2 jeigu ZF = 0 IR SF = OF
+    //JGx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu ZF = 0 IR SF = OF
     public void JG(String address) {
         if (Processor.getZF() == 0 && Processor.getSF() == Processor.getOF()) {
             pc = Integer.parseInt(address, 16);
         }
     }
 
-    //JLx1x2 - valdymas turi būti perduotas kodo segmento žodžiui, nurodytam adresu 16* x1 + x2 jeigu SF != OF
+    //JLx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu SF != OF
     public void JL(String address) {
         if (Processor.getSF() != Processor.getOF()) {
             pc = Integer.parseInt(address, 16);
@@ -177,31 +177,31 @@ public class CommandProcessor {
 
     public void PUSH() {
         memory.getBlock(0).push(String.valueOf(Processor.r), ++sp);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
     public void POP() {
         Processor.r = Integer.parseInt(memory.getBlock(0).pop(sp--), 16);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
     public void PRNL() {
         System.out.print('\n');
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
     public void GD(String x, String y) {
         Integer.parseInt(x, 16);
-        ++Processor.pc;
+        ++Processor.ic;
     }
 
     public String PD(String x, String y) {
-        ++Processor.pc;
+        ++Processor.ic;
         return memory.getData(2);
     }
 
     public void PP(String address) {
-        ++Processor.pc;
+        ++Processor.ic;
         String stackData = memory.pop(sp--);
         memory.pushData(stackData, Integer.valueOf(address));
     }

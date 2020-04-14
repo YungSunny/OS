@@ -11,18 +11,22 @@ public class RealMachine {
         VirtualMachine vm = new VirtualMachine(this);
         processor = Processor.getInstance();
         memory = new Memory();
+
+        try {
+            vm.loadProgramToCodeSegment("$prog1", "C:\\Users\\gsnio\\Desktop\\OS\\os-lab-master\\hdd.txt");
+        } catch (Exception ex) {
+
+        }
+
+
+        displayRegisters();
     }
 
     public void displayRegisters() {
         System.out.println("---------REGISTERS--------");
-        System.out.println("IC: " + Integer.toHexString(getIc()));
-        System.out.println("SF: " + Integer.toHexString(getSf()));
-        System.out.println("PTR: " + Integer.toHexString(this.ptr));
-        System.out.println("------");
-        System.out.println("MODE: " + Integer.toHexString(this.mode));
-        System.out.println("CH1: " + Integer.toHexString(this.ch1));
-        System.out.println("CH2: " + Integer.toHexString(this.ch2));
-        System.out.println("CH3: " + Integer.toHexString(this.ch3));
+        String registersString = String.format("IC:=%s\tSF:=%s\tPTR:=%s\tMODE:=%s\t\nCH1:=%s\tCH2:=%s\tCH3:=%s\t", 
+                                                processor.ic, processor.sf.toString(), processor.ptr, processor.mode, processor.ch1, processor.ch2, processor.ch3);
+        System.out.println(registersString);
         System.out.println("--------------------------");
     }
 }

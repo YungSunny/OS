@@ -9,8 +9,8 @@ public class MemoryBlock {
     public MemoryBlock() {
         data = new Word[BLOCK_SIZE];
         
-        for (Word currWord: data) {
-            currWord = new Word();
+        for (int i = 0; i < BLOCK_SIZE; i++) {
+            data[i] = new Word();
             setFree(true);
         }
     }

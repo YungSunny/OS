@@ -18,12 +18,14 @@ public class VirtualMemory {
     // code, data, stack
     private int[] currentOffset = {0, 0, 0};
 
-    public VirtualMemory(int prt) {
-        this.ptr=prt;
+    public VirtualMemory(int ptr) {
+        this.ptr=ptr;
         memory = new MemoryBlock[VIRTUAL_MEMORY_BLOCKS];
         
-        for (MemoryBlock block: memory) 
-            block = new MemoryBlock();
+        for (int i = 0; i < VIRTUAL_MEMORY_BLOCKS; i++) {
+            memory[i] = new MemoryBlock();
+        }
+
     }
 
     public void syncMemory() {
