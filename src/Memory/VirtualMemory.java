@@ -40,14 +40,15 @@ public class VirtualMemory {
     }
 
     public void pushCode(String statement) {
-        if (currentOffset[0] > 15) {
-            currentBlock[0]++;
-            
+        if (currentOffset[0] > MemoryBlock.BLOCK_SIZE-1) {
+
             if (currentBlock[0] == segments[1])
                 System.out.println("ERROR - segment full");
-            else 
+            else {
                 currentBlock[0]++;
-            
+                currentOffset[0] = 0;
+            }
+
         }
 
         getBlock(currentBlock[0]).pushData(currentOffset[0], statement);
@@ -56,13 +57,14 @@ public class VirtualMemory {
     }
 
     public void pushData(String statement) {
-        if (currentOffset[1] > 15) {
-            currentBlock[1]++;
+        if (currentOffset[1] > MemoryBlock.BLOCK_SIZE-1) {
 
             if (currentBlock[1] == segments[2])
                 System.out.println("ERROR - segment full");
-            else
+            else {
                 currentBlock[1]++;
+                currentOffset[1]=0;
+            }
 
         }
 

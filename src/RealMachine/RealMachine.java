@@ -15,7 +15,12 @@ public class RealMachine {
         try {
             vm.loadProgram("$prog1");
         } catch (Exception ex) {
+            System.out.println(ex.getStackTrace());
+        }
 
+        String commandToExecute;
+        while (!(commandToExecute = getCommand(vm)).equals("HALT")) {
+            System.out.println(commandToExecute);
         }
 
         displayRegisters();
@@ -27,5 +32,9 @@ public class RealMachine {
                                                 processor.ic, processor.sf.toString(), processor.ptr, processor.mode, processor.ch1, processor.ch2, processor.ch3);
         System.out.println(registersString);
         System.out.println("--------------------------");
+    }
+
+    public String getCommand(VirtualMachine vm) {
+        return vm.memory.getCode(vm.ic++);
     }
 }

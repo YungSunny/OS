@@ -11,11 +11,11 @@ public class VirtualMachine {
 
     private RealMachine realMachine;
     private CommandProcessor commandProcessor;
-    private VirtualMemory memory;
+    public VirtualMemory memory;
 
     private int ptr;
-    private short sp;
-    private short ic;
+    public short sp;
+    public short ic;
 
     public VirtualMachine() {
         this.memory = new VirtualMemory(ptr);
@@ -25,8 +25,6 @@ public class VirtualMachine {
     }
 
     public void loadProgram(String codeName) throws Exception {
-        //setMode((byte) 0);
-        //setCh3((byte) 1);
 
         // temporary
         String hddName = "hdd.txt";
@@ -35,8 +33,6 @@ public class VirtualMachine {
         try(BufferedReader br = new BufferedReader(new FileReader(hddName))) {
             int wordIndex = 0;
 
-            //Goes through the file looking for a codeName
-            //If codeName is not found gives "Wrong assignment" exception
             while(!(line = br.readLine()).equals(codeName)){
 
             }
@@ -74,8 +70,6 @@ public class VirtualMachine {
                 //setPi(Byte.parseByte(e.getMessage().substring(0, 1)));
             }
         }
-        //setMode((byte) 1);
-        //setCh3((byte) 0);
     }
 
     public boolean validateKeyword(String keyword) {
