@@ -52,8 +52,9 @@ public class VirtualMachine {
 
                 // kolkas apsieinam be sito ifo
                 if(validateKeyword(line)){
-                    //DW and DD procedures are unique in a sense, that they take up 2 words
-                    // kolkas palieku sita bybiene
+                    if(line.matches("[C][O][D][E]") || line.matches("[D][A][T][A]"))
+                        continue;
+                    
                     if(line.matches("[D][W]\\s.+")){
                         tokens = line.split(" ");
                         wordIndex++;
@@ -64,13 +65,10 @@ public class VirtualMachine {
                     }
                 }
             }
-            /*if(!String.valueOf(Memory.getFromSupervisor(wordIndex - 1)).equals("HALT")){
-                throw new Exception("1");
-            }*/
         } catch (FileNotFoundException fe) {
-            throw new Exception("HDD DOESN'T EXIST!");
+            throw new Exception("HDD file was not found!");
         } catch (NullPointerException e){
-            throw new Exception("CODE WITH THAT NAME WAS NOT FOUND ON HDD");
+            throw new Exception("Program with specified name was not found in hdd");
         } catch (Exception e) {
             if(e.getMessage().substring(0, 1).matches("\\d")) {
                 //setPi(Byte.parseByte(e.getMessage().substring(0, 1)));
