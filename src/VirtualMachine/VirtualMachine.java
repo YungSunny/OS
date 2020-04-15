@@ -110,8 +110,20 @@ public class VirtualMachine {
 
         // cia kaip suprantu reiks suhandlint visas komandas kurios bus ivedamos
         switch(command) {
-            case "XXX":
-                //commandProcessor.XXX();
+            case "ADD":
+                commandProcessor.ADD();
+                break;
+            case "SUB":
+                commandProcessor.SUB();
+                break;
+            case "MUL":
+                commandProcessor.MUL();
+                break;
+            case "DIV":
+                commandProcessor.DIV();
+                break;
+            case "CMP":
+                commandProcessor.CMP();
                 break;
             default:
                 break;
