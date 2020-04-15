@@ -24,13 +24,15 @@ public class VirtualMachine {
         ic = 0;
     }
 
-    public void loadProgramToCodeSegment(String codeName, String hddPath) throws Exception {
+    public void loadProgram(String codeName) throws Exception {
         //setMode((byte) 0);
         //setCh3((byte) 1);
 
+        // temporary
+        String hddName = "hdd.txt";
         String line;
         String[] tokens;
-        try(BufferedReader br = new BufferedReader(new FileReader(hddPath))) {
+        try(BufferedReader br = new BufferedReader(new FileReader(hddName))) {
             int wordIndex = 0;
 
             //Goes through the file looking for a codeName
@@ -49,34 +51,18 @@ public class VirtualMachine {
                 }
 
                 // kolkas apsieinam be sito ifo
-                //if(checkCode(line)){
+                if(validateKeyword(line)){
                     //DW and DD procedures are unique in a sense, that they take up 2 words
                     // kolkas palieku sita bybiene
-                    if(line.matches("[D][W|D]\\s.+")){
+                    if(line.matches("[D][W]\\s.+")){
                         tokens = line.split(" ");
-                        //Memory.addToSupervisor(wordIndex, tokens[0].toCharArray());
                         wordIndex++;
-
-                        if(wordIndex >= 128) {
-                            throw new Exception("4");
-                        }
-                        if(tokens[1].length() > 4) {
-                            //Memory.addToSupervisor(wordIndex, tokens[1].substring(0, 4).toCharArray());
-                            wordIndex++;
-                            if(wordIndex >= 128) {
-                                throw new Exception("4");
-                            }
-                            //Memory.addToSupervisor(wordIndex, tokens[1].substring(4).toCharArray());
-                            wordIndex++;
-                        } else {
-                            //Memory.addToSupervisor(wordIndex, tokens[1].toCharArray());
-                            wordIndex++;
-                        }
+                        memory.pushData(tokens[1]);
                     } else {
                         memory.pushCode(line);
                         wordIndex++;
                     }
-                //}
+                }
             }
             /*if(!String.valueOf(Memory.getFromSupervisor(wordIndex - 1)).equals("HALT")){
                 throw new Exception("1");
@@ -92,6 +78,34 @@ public class VirtualMachine {
         }
         //setMode((byte) 1);
         //setCh3((byte) 0);
+    }
+
+    public boolean validateKeyword(String keyword) {
+        switch (keyword) {
+            case "CODE":
+                return true;
+            case "ADD" :
+                return true;
+            case "SUB" :
+                return true;
+            case "CMP" :
+                return true;
+            case "HALT" :
+                return true;
+            case "PRTS" :
+                return true;
+            case "PRTN" :
+                return true;
+            case "READ" :
+                return true;
+            case "DATA" :
+                return true;
+            case "DN" :
+                return true;
+            default:
+                return true;
+
+        }
     }
 
     public void executeCommand(String command) {

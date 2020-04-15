@@ -49,7 +49,6 @@ public class Word {
                 s = s + " ";
             }
             data = s;
-
         }
         else 
             data = s.substring(0, WORD_SIZE);
