@@ -11,7 +11,7 @@ public class VirtualMachine {
 
     private RealMachine realMachine;
     private CommandProcessor commandProcessor;
-    private VirtualMemory memory;
+    public VirtualMemory memory;
 
     private int ptr;
     private short sp;
@@ -49,7 +49,6 @@ public class VirtualMachine {
                 if(wordIndex >= 128) {
                     throw new Exception("4");
                 }
-
                 // kolkas apsieinam be sito ifo
                 if(validateKeyword(line)){
                     //DW and DD procedures are unique in a sense, that they take up 2 words

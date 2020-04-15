@@ -15,10 +15,22 @@ public class RealMachine {
         try {
             vm.loadProgram("$prog1");
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
-
+        showMemory(vm);
         displayRegisters();
+    }
+
+    public void showMemory(VirtualMachine vm) {
+        System.out.println("---- VM ----");
+        for (int blockIter = 0; blockIter < 8; blockIter++) {
+            System.out.print("BLOCK" + blockIter + " ");
+            for (int i = 0; i < 16; i++) {
+                System.out.print(i + ":" + vm.memory.getBlock(blockIter).getWord(i).getValue() + " ");
+            }
+            System.out.print('\n');
+        }
+        System.out.println("------------");
     }
 
     public void displayRegisters() {
