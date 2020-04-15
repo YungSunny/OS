@@ -91,6 +91,10 @@ public class VirtualMemory {
         return getBlock(segments[1] + pointer / 16).get(pointer % 16);
     }
 
+    public int getCurrentStackBlock() {
+        return currentBlock[2];
+    }
+
     public String pop(int pointer) {
         pointer--;
         String data = getBlock(segments[2] + pointer / 16).get(pointer % 16);

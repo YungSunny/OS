@@ -1,7 +1,5 @@
 package RealMachine;
 
-// kodel cia nx viskas static? :D
-
 public class Processor {
 
     //procesoriaus darbo rezimo registras

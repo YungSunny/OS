@@ -13,12 +13,13 @@ public class VirtualMachine {
     private CommandProcessor commandProcessor;
     public VirtualMemory memory;
 
-    private int ptr;
-    public short sp;
-    public short ic;
+    public static int ptr;
+    public static short sp;
+    public static int ic;
 
     public VirtualMachine() {
         this.memory = new VirtualMemory(ptr);
+        this.commandProcessor = new CommandProcessor(memory);
 
         sp = 0;
         ic = 0;
@@ -45,7 +46,6 @@ public class VirtualMachine {
                 if(wordIndex >= 128) {
                     throw new Exception("4");
                 }
-
                 // kolkas apsieinam be sito ifo
                 if(validateKeyword(line)){
                     if(line.matches("[C][O][D][E]") || line.matches("[D][A][T][A]"))
@@ -118,6 +118,9 @@ public class VirtualMachine {
                 break;
             case "CMP":
                 commandProcessor.CMP();
+                break;
+            case "PUSH":
+                commandProcessor.PUSH();
                 break;
             default:
                 break;
