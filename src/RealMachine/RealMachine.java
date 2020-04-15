@@ -8,7 +8,7 @@ public class RealMachine {
     Memory memory;
 
     public RealMachine(){
-        VirtualMachine vm = new VirtualMachine(this);
+        VirtualMachine vm = new VirtualMachine();
         processor = Processor.getInstance();
         memory = new Memory();
 

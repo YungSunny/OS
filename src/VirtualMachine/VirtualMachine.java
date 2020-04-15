@@ -17,8 +17,7 @@ public class VirtualMachine {
     private short sp;
     private short ic;
 
-    public VirtualMachine(RealMachine rm) {
-        this.realMachine = rm;
+    public VirtualMachine() {
         this.memory = new VirtualMemory(ptr);
 
         sp = 0;
