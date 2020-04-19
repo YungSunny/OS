@@ -14,7 +14,7 @@ public class CommandProcessor {
         this.memory = memory;
     }
 
-    public void PS(String address) {
+    public void LD(String address) {
         String data = memory.getData(Integer.valueOf(address));
         memory.push(data, VirtualMachine.sp++);
     }

@@ -100,7 +100,7 @@ public class VirtualMachine {
         }
     }
 
-    public void executeCommand(String command) {
+    public void executeCommand(String command, String parameter) {
 
         // cia kaip suprantu reiks suhandlint visas komandas kurios bus ivedamos
         switch(command) {
@@ -121,6 +121,9 @@ public class VirtualMachine {
                 break;
             case "PUSH":
                 commandProcessor.PUSH();
+                break;
+            case "LD":
+                commandProcessor.LD(parameter);
                 break;
             default:
                 break;

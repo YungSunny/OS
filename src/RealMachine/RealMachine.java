@@ -20,8 +20,15 @@ public class RealMachine {
 
         String commandToExecute;
         while (!(commandToExecute = getCommand(vm)).equals("HALT")) {
+            String[] tokens = new String[2];
             System.out.println(commandToExecute);
-            vm.executeCommand(commandToExecute);
+            if (commandToExecute.matches("[LD01]"))
+                tokens = commandToExecute.split("\\s+");
+
+            if (tokens[0] != null && tokens[1] != null)
+                vm.executeCommand(tokens[0], tokens[1]);
+            else
+                vm.executeCommand(commandToExecute, "");
         }
         showMemory(vm);
         displayRegisters();
@@ -29,7 +36,7 @@ public class RealMachine {
 
     public void showMemory(VirtualMachine vm) {
         System.out.println("---- VM ----");
-        for (int blockIter = 0; blockIter < 8; blockIter++) {
+        for (int blockIter = 0; blockIter < 16; blockIter++) {
             System.out.print("BLOCK" + blockIter + " ");
             for (int i = 0; i < 16; i++) {
                 System.out.print(i + ":" + vm.memory.getBlock(blockIter).getWord(i).getValue() + " ");
