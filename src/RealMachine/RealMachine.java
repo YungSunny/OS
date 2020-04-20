@@ -6,30 +6,35 @@ import VirtualMachine.VirtualMachine;
 public class RealMachine {
     Processor processor;
     RealMemory memory;
+    Paging paging;
+
+    public static int MAX_REALMEMORY_BLOCKS = 16;
 
     public RealMachine(){
-        VirtualMachine vm = new VirtualMachine();
         processor = Processor.getInstance();
         memory = new RealMemory();
+        paging = new Paging();
+
+    }
+
+    public void runOS(){
+        VirtualMachine vm = new VirtualMachine();
+
+        processor.ptr = paging.getFreeBlock(memory.memoryBlocks);
+        memory.memoryBlocks[processor.ptr] = paging.getPageTable(memory.memoryBlocks);
 
         try {
-            vm.loadProgram("$prog1");
+            vm.loadProgram("$prog1", processor.ptr);
         } catch (Exception ex) {
             System.out.println(ex.getStackTrace());
         }
 
         String commandToExecute;
         while (!(commandToExecute = getCommand(vm)).equals("HALT")) {
-            String[] tokens = new String[2];
-            System.out.println(commandToExecute);
-            if (commandToExecute.matches("[LD01]"))
-                tokens = commandToExecute.split("\\s+");
+            vm.executeCommand(commandToExecute, "");
 
-            if (tokens[0] != null && tokens[1] != null)
-                vm.executeCommand(tokens[0], tokens[1]);
-            else
-                vm.executeCommand(commandToExecute, "");
         }
+        System.out.println(vm.memory.getCode(processor.ptr).toString());
         showMemory(vm);
         displayRegisters();
     }
@@ -63,4 +68,5 @@ public class RealMachine {
     public String getCommand(VirtualMachine vm) {
         return vm.memory.getCode(vm.ic++);
     }
+
 }

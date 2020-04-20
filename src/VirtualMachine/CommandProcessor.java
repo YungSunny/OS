@@ -19,103 +19,97 @@ public class CommandProcessor {
         memory.push(data, VirtualMachine.sp++);
     }
 
+    public void PT(String address) {
+        String data = memory.pop(VirtualMachine.sp--).trim();
+        memory.pushData(data, Integer.valueOf(address));
+    }
+
     public String PP() {
         return memory.pop(VirtualMachine.sp--);
     }
 
     //  Jeigu rezultatas netelpa, OF = 1. Jeigu reiksmes zenklo bitas yra 1, SF = 1.
     public void ADD() {
-        String a = memory.pop(VirtualMachine.sp--);
-        int a1 = Integer.parseInt(a, 16);
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--).trim(), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--).trim(), 16);
 
-        String b = memory.pop(VirtualMachine.sp--);
-        int b1 = Integer.parseInt(b, 16);
-
-        if (a1 + b1 > MAX_INT) {
+        if (x + y > MAX_INT)
             Processor.setCF();
-        }
-        a1 += b1;
-        if (((a1 >> 6) & 1) == 1) {
-            Processor.setSF();
-        }
 
-        //memory.push(String.valueOf(b1), VirtualMachine.sp++);
-        memory.push(String.valueOf(a1), VirtualMachine.sp++);
+        x += y;
+
+        if (((x >> 6) & 1) == 1)
+            Processor.setSF();
+
+        memory.push(Integer.toHexString(x), VirtualMachine.sp++);
         ++Processor.ic;
     }
 
     public void SUB() {
-        String a = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int a1 = Integer.parseInt(a, 16);
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--).trim(), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--).trim(), 16);
 
-        String b = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int b1 = Integer.parseInt(b, 16);
-
-        if (a1 - b1 < 0) {
+        if (y - x < 0) {
             Processor.setOF();
-            return;
+            y -= x;
         } else {
-            a1 -= b1;
+            y -= x;
         }
-        if (((a1 >> 6) & 1) == 1) {
+        if (((y >> 6) & 1) == 1) {
             Processor.setSF();
         }
-        memory.getBlock(0).push(String.valueOf(b1), ++VirtualMachine.sp);
-        memory.getBlock(0).push(String.valueOf(a1), ++VirtualMachine.sp);
+
+        memory.push(Integer.toHexString(y), VirtualMachine.sp++);
         ++Processor.ic;
     }
 
     public void MUL() {
-        String a = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int a1 = Integer.parseInt(a, 16);
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
 
-        String b = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int b1 = Integer.parseInt(b, 16);
-        if (a1 * b1 > MAX_INT) {
+        if (x * y > MAX_INT) {
             Processor.setOF();
             return;
-        } else {
-            a1 *= b1;
-        }
-        if (((a1 >> 6) & 1) == 1) {
+        } else
+            x *= y;
+
+        if (((x >> 6) & 1) == 1)
             Processor.setSF();
-        }
-        memory.getBlock(0).push(String.valueOf(b1), ++VirtualMachine.sp);
-        memory.getBlock(0).push(String.valueOf(a1), ++VirtualMachine.sp);
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
         ++Processor.ic;
     }
 
     // Padalina R1 is R2, irasoma i R1. Jeigu reiksmes zenklo bitas yra 1, SF = 1.
     public void DIV() {
-        String a = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int a1 = Integer.parseInt(a, 16);
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
 
-        String b = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int b1 = Integer.parseInt(b, 16);
-        a1 /= b1;
-        if (((a1 >> 6) & 1) == 1) {
+        x /= y;
+        if (((x >> 6) & 1) == 1) {
             Processor.setSF();
         }
-        memory.getBlock(0).push(String.valueOf(b1), ++VirtualMachine.sp);
-        memory.getBlock(0).push(String.valueOf(a1), ++VirtualMachine.sp);
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
         ++Processor.ic;
     }
 
     //si komanda palygina registre R1 ir R2 esancias reiksmes. Jeigu reiksmes lygios, ZF = 1, priesingu atveju ZF = 0.
     public void CMP() {
-        String a = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int a1 = Integer.parseInt(a, 16);
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
 
-        String b = memory.getBlock(0).pop(VirtualMachine.sp--);
-        int b1 = Integer.parseInt(b, 16);
-
-        if (a1 == b1) {
+        if (x - y == 0) {
             Processor.setZF();
-        } else {
+            memory.push(Integer.toHexString(0), ++VirtualMachine.sp);
+        } else if (x - y > 0) {
+            memory.push(Integer.toHexString(1), ++VirtualMachine.sp);
+            Processor.clearZF();
+        } else if (x - y < 0) {
+            memory.push(Integer.toHexString(2), ++VirtualMachine.sp);
             Processor.clearZF();
         }
-        memory.getBlock(0).push(String.valueOf(b1), ++VirtualMachine.sp);
-        memory.getBlock(0).push(String.valueOf(a1), ++VirtualMachine.sp);
+
         ++Processor.ic;
     }
 
@@ -179,8 +173,16 @@ public class CommandProcessor {
         ++Processor.ic;
     }
 
+    public void PR(String address) {
+        System.out.print(memory.getData(Integer.valueOf(address)));
+    }
+
+    public void PRTN() {
+        //TODO
+    }
+
     public void PRNL() {
-        System.out.print('\n');
+        System.out.println();
         ++Processor.ic;
     }
 

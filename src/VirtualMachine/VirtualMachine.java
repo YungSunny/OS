@@ -25,14 +25,13 @@ public class VirtualMachine {
         ic = 0;
     }
 
-    public void loadProgram(String codeName) throws Exception {
-
+    public void loadProgram(String codeName, int ptr) throws Exception {
+        this.ptr = ptr;
         // temporary
         String hddName = "hdd.txt";
         String line;
         String[] tokens;
         try(BufferedReader br = new BufferedReader(new FileReader(hddName))) {
-            int wordIndex = 0;
 
             while(!(line = br.readLine()).equals(codeName)){
 
@@ -42,10 +41,7 @@ public class VirtualMachine {
                 if(line.equals("")){
                     break;
                 }
-                //Checks if code is not too big
-                if(wordIndex >= 128) {
-                    throw new Exception("4");
-                }
+
                 // kolkas apsieinam be sito ifo
                 if(validateKeyword(line)){
                     if(line.matches("[C][O][D][E]") || line.matches("[D][A][T][A]"))
@@ -53,11 +49,9 @@ public class VirtualMachine {
                     
                     if(line.matches("[D][W]\\s.+")){
                         tokens = line.split(" ");
-                        wordIndex++;
                         memory.pushData(tokens[1]);
                     } else {
                         memory.pushCode(line);
-                        wordIndex++;
                     }
                 }
             }
@@ -70,6 +64,7 @@ public class VirtualMachine {
                 //setPi(Byte.parseByte(e.getMessage().substring(0, 1)));
             }
         }
+        ic = 0;
     }
 
     public boolean validateKeyword(String keyword) {
@@ -102,8 +97,15 @@ public class VirtualMachine {
 
     public void executeCommand(String command, String parameter) {
 
+        if (command.substring(0 ,2).equals("LD"))
+            commandProcessor.LD(command.substring(2));
+        else if (!command.equals("PRNL") && command.substring(0, 2).equals("PR"))
+            commandProcessor.PR(command.substring(2));
+        else if (command.substring(0, 2).equals("PT"))
+            commandProcessor.PT(command.substring(2));
+
         // cia kaip suprantu reiks suhandlint visas komandas kurios bus ivedamos
-        switch(command) {
+        switch(command.trim()) {
             case "ADD":
                 commandProcessor.ADD();
                 break;
@@ -122,8 +124,11 @@ public class VirtualMachine {
             case "PUSH":
                 commandProcessor.PUSH();
                 break;
-            case "LD":
-                commandProcessor.LD(parameter);
+            case "PRNL":
+                commandProcessor.PRNL();
+                break;
+            case "PRTN":
+                commandProcessor.PRTN();
                 break;
             default:
                 break;

@@ -43,7 +43,7 @@ public class Word {
     }
 
     public void setValue(String s) {
-        if (s.length() <= WORD_SIZE) {
+        if (s.trim().length() <= WORD_SIZE) {
             
             while (s.length() < WORD_SIZE) {
                 s = s + " ";

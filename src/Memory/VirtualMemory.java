@@ -2,7 +2,7 @@ package Memory;
 
 public class VirtualMemory {
     private MemoryBlock[] memory;
-    private static final int VIRTUAL_MEMORY_BLOCKS = 16;
+    public static int VIRTUAL_MEMORY_BLOCKS = 16;
     public int ptr;
     public RealMemory realMemory;
 
