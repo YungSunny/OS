@@ -103,6 +103,14 @@ public class VirtualMachine {
             commandProcessor.PR(command.substring(2));
         else if (command.substring(0, 2).equals("PT"))
             commandProcessor.PT(command.substring(2));
+        else if (command.substring(0, 2).equals("JP"))
+            commandProcessor.JP(command.substring(2));
+        else if (command.substring(0, 2).equals("JE"))
+            commandProcessor.JE(command.substring(2));
+        else if (command.substring(0, 2).equals("JG"))
+            commandProcessor.JG(command.substring(2));
+        else if (command.substring(0, 2).equals("JL"))
+            commandProcessor.JL(command.substring(2));
 
         // cia kaip suprantu reiks suhandlint visas komandas kurios bus ivedamos
         switch(command.trim()) {
@@ -120,6 +128,24 @@ public class VirtualMachine {
                 break;
             case "CMP":
                 commandProcessor.CMP();
+                break;
+            case "AND":
+                commandProcessor.AND();
+                break;
+            case "OR":
+                commandProcessor.OR();
+                break;
+            case "NOT":
+                commandProcessor.NOT();
+                break;
+            case "XOR":
+                commandProcessor.XOR();
+                break;
+            case "LSF":
+                commandProcessor.LSF();
+                break;
+            case "RSF":
+                commandProcessor.RSF();
                 break;
             case "PUSH":
                 commandProcessor.PUSH();

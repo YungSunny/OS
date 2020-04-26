@@ -9,7 +9,6 @@ public class Processor {
     // komandu skaitliuko registras
     public static short ic;
 
-    public static int r;
     //puslapiu lenteles registras
     public int ptr;
     //programiniu pertrukimu registras
@@ -44,7 +43,6 @@ public class Processor {
         ch1 = 0;
         ch2 = 0;
         ch3 = 0;
-        r = 0;
         mode = 0;
         ti = 1;
         si = 0;

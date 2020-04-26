@@ -6,8 +6,8 @@ import RealMachine.Processor;
 public class CommandProcessor {
 
     public static final int MAX_INT = 65535;
-    public String[] commands = {"add", "sub", "mul", "div", "je*", "jn*", "jm*", "ja*", "cmp", "jb*", "jl*", "push",
-            "pop", "prnl", "gd**", "pd*", "halt", "ps*", "pd*", "pp*"};
+    /*public String[] commands = {"add", "sub", "mul", "div", "je*", "jn*", "jm*", "ja*", "cmp", "jb*", "jl*", "push",
+            "pop", "prnl", "gd**", "pd*", "halt", "ps*", "pd*", "pp*"};*/
     public VirtualMemory memory;
 
     public CommandProcessor(VirtualMemory memory) {
@@ -113,11 +113,66 @@ public class CommandProcessor {
         ++Processor.ic;
     }
 
-    //TODO VISI JUMPAI NUsOKA DUOTU ADRESU
-    //JMx1x2 - besalyginio valdymo perdavimo komanda. Ji reiskia, kad valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16 * x1 + x2
-    public void JM(String address) {
-        VirtualMachine.ic = Integer.parseInt(address, 16);
+    public void AND() {
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
 
+        x = x & y;
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
+        ++Processor.ic;
+    }
+
+    public void OR() {
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        x = x | y;
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
+        ++Processor.ic;
+    }
+
+    public void NOT() {
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        x = (-1)*x;
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
+        ++Processor.ic;
+    }
+
+    public void XOR() {
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        int y = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        x = x ^ y;
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
+        ++Processor.ic;
+    }
+
+    public void LSF() {
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        x = x << 1;
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
+        ++Processor.ic;
+    }
+
+    public void RSF() {
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        x = x >> 1;
+
+        memory.push(Integer.toHexString(x), ++VirtualMachine.sp);
+        ++Processor.ic;
+    }
+
+    //JMx1x2 - besalyginio valdymo perdavimo komanda. Ji reiskia, kad valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16 * x1 + x2
+    public void JP(String address) {
+        VirtualMachine.ic = Integer.parseInt(address, 16);
     }
 
     //JEx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu ZF = 1
@@ -127,49 +182,31 @@ public class CommandProcessor {
         }
     }
 
-    //JNx1x2 - valdymas turi buti perduotas kodo segmentui, nurodytam adresu 16*x1+x2, jeigu ZF = 0
-    public void JN(String address) {
-        if (Processor.getZF() == 0) {
-            VirtualMachine.ic = Integer.parseInt(address, 16);
-        }
-
-    }
-
-    //JAx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu CF = OF
-    public void JA(String address) {
-        if (Processor.getCF() == 0) {
-            VirtualMachine.ic = Integer.parseInt(address, 16);
-        }
-    }
-
-    //JBx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu CF=1
-    public void JB(String address) {
-        if (Processor.getCF() == 1) {
-            VirtualMachine.ic = Integer.parseInt(address, 16);
-        }
-    }
-
-    //JGx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu ZF = 0 IR SF = OF
+    //JGx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu CMP rezultatas buvo 1
     public void JG(String address) {
-        if (Processor.getZF() == 0 && Processor.getSF() == Processor.getOF()) {
+        int cmpResult = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        if (cmpResult == 1) {
             VirtualMachine.ic = Integer.parseInt(address, 16);
         }
     }
 
-    //JLx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu SF != OF
+    //JLx1x2 - valdymas turi buti perduotas kodo segmento zodziui, nurodytam adresu 16* x1 + x2 jeigu CMP rezultatas buvo 2
     public void JL(String address) {
-        if (Processor.getSF() != Processor.getOF()) {
+        int cmpResult = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+        if (cmpResult == 2) {
             VirtualMachine.ic = Integer.parseInt(address, 16);
         }
     }
 
     public void PUSH() {
-        memory.getBlock(memory.getCurrentStackBlock()).push(String.valueOf(Processor.r), ++VirtualMachine.sp);
+        memory.getBlock(memory.getCurrentStackBlock()).push(String.valueOf(0), ++VirtualMachine.sp);
         ++Processor.ic;
     }
 
     public void POP() {
-        Processor.r = Integer.parseInt(memory.getBlock(0).pop(VirtualMachine.sp--), 16);
+        int poppedValue = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        memory.pushData(Integer.toHexString(poppedValue));
         ++Processor.ic;
     }
 
@@ -178,22 +215,14 @@ public class CommandProcessor {
     }
 
     public void PRTN() {
-        //TODO
+        int x = Integer.parseInt(memory.pop(VirtualMachine.sp--), 16);
+
+        System.out.println("PRTN: " + x);
     }
 
     public void PRNL() {
         System.out.println();
         ++Processor.ic;
-    }
-
-    public void GD(String x, String y) {
-        Integer.parseInt(x, 16);
-        ++Processor.ic;
-    }
-
-    public String PD(String x, String y) {
-        ++Processor.ic;
-        return memory.getData(2);
     }
 
     public void PP(String address) {
